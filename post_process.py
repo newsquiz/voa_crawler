@@ -15,7 +15,7 @@ def process_content(content):
         step = content.index(mark)
         content = content[:step]
         content = content.replace("<b>", "").replace("</b>", "").replace("<br>", "").replace("</a>", "")
-        content = content.replace("<i>", "").replace("</i>", "")
+        content = content.replace("<i>", "").replace("</i>", "").replace("<strong>", "").replace("</strong>", "")
         content = content.replace("\n\n", "\n")
         mark = "<a href=\"http://voaspecialenglish."
         step = content.index(mark)
