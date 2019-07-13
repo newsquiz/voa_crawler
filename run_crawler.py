@@ -41,26 +41,33 @@ def download(yt_url):
 
 
 def main():
-    data = 'data.json'
+    data_path_dir = 'data'
+    if not os.path.exists(data_path_dir):
+        os.makedirs(data_path_dir)
+    data_path = 'data.json'
     try:
-        os.remove(data)
+        os.remove(data_path)
     except:
         pass
-    subprocess.call(['scrapy', 'runspider', 'scrapy/crawler/spiders/quotes_spider.py', '-o', data])
-    post_process(data)
-    with open(data, 'r') as fn:
+    subprocess.call(['scrapy', 'runspider', 'scrapy/crawler/spiders/quotes_spider.py', '-o', data_path])
+    post_process(data_path)
+    with open(data_path, 'r') as fn:
         data = json.loads(fn.read())
     new_data = []
-    for item in data:
+    for item in data[:2]:
         download(item['url'])
         new_item = {
             'content': item['content'],
             'title': item['title'],
             'thumbnail': item['thumbnail'],
-            'audio': os.path.join('data', glob.glob('*.mp3')[0]),
+            'audio': os.path.join(data_path_dir, glob.glob('*.mp3')[0]),
             'type': 'audio'
         }
-        shutil.move(glob.glob('*.mp3')[0], 'data')
+        shutil.move(glob.glob('*.mp3')[0], data_path_dir)
+        new_data.append(new_item)
+    os.remove(data_path)
+    with open(data_path, 'w') as fn:
+        json.dump(new_data, fn)
 
 
 if __name__ == '__main__':
