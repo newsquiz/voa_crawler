@@ -54,7 +54,7 @@ def main():
     with open(data_path, 'r') as fn:
         data = json.loads(fn.read())
     new_data = []
-    for item in data[:2]:
+    for item in data:
         download(item['url'])
         new_item = {
             'content': item['content'],
